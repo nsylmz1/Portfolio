@@ -1,0 +1,17 @@
+﻿@model portfolyo2.Models.tbl_category
+@{
+    ViewBag.Title = "UpdateCategory";
+    Layout = "~/Views/AdminLayout/Index.cshtml";
+}
+
+<h2>Kategori Güncelleme</h2>
+
+<form method = "post">
+    @Html.HiddenFor(x=>x.CategoryID)
+    <label>Kategori adı</label>
+    @Html.TextBoxFor(x=>x.CategoryName)
+    <button>Güncelle</button>
+
+
+</form>
+
