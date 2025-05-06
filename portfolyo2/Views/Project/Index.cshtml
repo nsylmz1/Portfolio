@@ -1,0 +1,56 @@
+﻿@model List<portfolyo2.Models.tbl_project>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/AdminLayout/Index.cshtml";
+    int count = 0;
+
+}
+
+<h2>Index</h2>
+
+
+<div class="container">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Project ID</th>
+                <th>Project Name</th>
+                <th>Description</th>
+                <th>Project Link</th>
+                <th>Image 1</th>
+                <th>Image 2</th>
+                <th>Image 3</th>
+
+                <th>Category</th>
+
+
+                <th>Güncelle</th>
+                <th>Sil</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                count++;
+
+                <tr>
+                    <td>@item.ProjectID</td>
+                    <td>@item.ProjectName</td>
+                    <td>@item.Description</td>
+                    <td>@item.ProjectLink</td>
+                    <td><img src="@item.image1" style="width:50px" /></td>
+                    <td><img src="@item.image2" style="width:50px" /></td>
+                    <td><img src="@item.image3" style="width:50px" /></td>
+                    <td>@(item.tbl_category?.CategoryName ?? "Kategori Yok")</td>
+
+
+
+                    <td><a href="/Project/UpdateProject/@item.ProjectID" class="btn btn-success">Güncelle</a></td>
+                    <td><a href="/Project/RemoveProject/@item.ProjectID" class="btn btn-danger">Sil</a></td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+    <a href="/Project/CreateProject/" class="btn btn-secondary">Oluştur</a>
+</div>

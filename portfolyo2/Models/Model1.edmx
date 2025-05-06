@@ -5,6 +5,16 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="DbAcunMedyaProjectModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
         <EntityType Name="tbl_about">
           <Key>
             <PropertyRef Name="AboutID" />
@@ -51,11 +61,11 @@
           <Property Name="Description" Type="nvarchar" MaxLength="50" />
           <Property Name="Section" Type="nvarchar" MaxLength="50" />
         </EntityType>
-        <EntityType Name="tbl_job">
+        <EntityType Name="tbl_Jobs">
           <Key>
             <PropertyRef Name="JobID" />
           </Key>
-          <Property Name="JobID" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="JobID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Tittle" Type="nvarchar" MaxLength="50" />
           <Property Name="StartDate" Type="datetime" />
           <Property Name="EndDate" Type="datetime" />
@@ -83,16 +93,26 @@
           <Property Name="image1" Type="nchar" MaxLength="500" />
           <Property Name="image2" Type="nchar" MaxLength="500" />
           <Property Name="image3" Type="nchar" MaxLength="500" />
+          <Property Name="CategoryID" Type="int" />
         </EntityType>
         <EntityType Name="tbl_services">
           <Key>
             <PropertyRef Name="ServiceID" />
           </Key>
           <Property Name="ServiceID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Description" Type="nchar" MaxLength="1000" />
+          <Property Name="Description" Type="nvarchar" MaxLength="1000" />
           <Property Name="tittle" Type="nvarchar" MaxLength="50" />
           <Property Name="Icon" Type="nvarchar" MaxLength="1000" />
           <Property Name="description2" Type="nvarchar" MaxLength="500" />
+        </EntityType>
+        <EntityType Name="tbl_skilss11">
+          <Key>
+            <PropertyRef Name="SkillsId" />
+          </Key>
+          <Property Name="SkillsId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SkillsName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Derece" Type="tinyint" />
+          <Property Name="Description" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="tbl_slider">
           <Key>
@@ -114,17 +134,35 @@
           <Property Name="ImageUrl" Type="nvarchar" MaxLength="1000" />
           <Property Name="tittle" Type="nvarchar" MaxLength="200" />
         </EntityType>
+        <Association Name="FK_tbl_project_tbl_category">
+          <End Role="tbl_category" Type="Self.tbl_category" Multiplicity="0..1" />
+          <End Role="tbl_project" Type="Self.tbl_project" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_category">
+              <PropertyRef Name="CategoryID" />
+            </Principal>
+            <Dependent Role="tbl_project">
+              <PropertyRef Name="CategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="DbAcunMedyaProjectModelStoreContainer">
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_about" EntityType="Self.tbl_about" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_category" EntityType="Self.tbl_category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_contact" EntityType="Self.tbl_contact" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_education" EntityType="Self.tbl_education" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="tbl_job" EntityType="Self.tbl_job" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_Jobs" EntityType="Self.tbl_Jobs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_message" EntityType="Self.tbl_message" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_project" EntityType="Self.tbl_project" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_services" EntityType="Self.tbl_services" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_skilss11" EntityType="Self.tbl_skilss11" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_slider" EntityType="Self.tbl_slider" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="testimonials" EntityType="Self.testimonials" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_tbl_project_tbl_category" Association="Self.FK_tbl_project_tbl_category">
+            <End Role="tbl_category" EntitySet="tbl_category" />
+            <End Role="tbl_project" EntitySet="tbl_project" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -154,6 +192,7 @@
           </Key>
           <Property Name="CategoryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="CategoryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tbl_project" Relationship="DbAcunMedyaProjectModel.FK_tbl_project_tbl_category" FromRole="tbl_category" ToRole="tbl_project" />
         </EntityType>
         <EntityType Name="tbl_contact">
           <Key>
@@ -176,17 +215,6 @@
           <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Section" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="tbl_job">
-          <Key>
-            <PropertyRef Name="JobID" />
-          </Key>
-          <Property Name="JobID" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
-          <Property Name="Tittle" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="StartDate" Type="DateTime" Precision="3" />
-          <Property Name="EndDate" Type="DateTime" Precision="3" />
-          <Property Name="CompanyName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-        </EntityType>
         <EntityType Name="tbl_message">
           <Key>
             <PropertyRef Name="MessageID" />
@@ -208,13 +236,17 @@
           <Property Name="image1" Type="String" MaxLength="500" FixedLength="true" Unicode="true" />
           <Property Name="image2" Type="String" MaxLength="500" FixedLength="true" Unicode="true" />
           <Property Name="image3" Type="String" MaxLength="500" FixedLength="true" Unicode="true" />
+          <Property Name="CategoryID" Type="Int32" />
+          <NavigationProperty Name="tbl_project1" Relationship="DbAcunMedyaProjectModel.FK_tbl_project_tbl_project" FromRole="tbl_project" ToRole="tbl_project1" />
+          <NavigationProperty Name="tbl_project2" Relationship="DbAcunMedyaProjectModel.FK_tbl_project_tbl_project" FromRole="tbl_project1" ToRole="tbl_project" />
+          <NavigationProperty Name="tbl_category" Relationship="DbAcunMedyaProjectModel.FK_tbl_project_tbl_category" FromRole="tbl_project" ToRole="tbl_category" />
         </EntityType>
         <EntityType Name="tbl_services">
           <Key>
             <PropertyRef Name="ServiceID" />
           </Key>
           <Property Name="ServiceID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Description" Type="String" MaxLength="1000" FixedLength="true" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Name="tittle" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Icon" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Name="description2" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
@@ -233,12 +265,22 @@
           <EntitySet Name="tbl_category" EntityType="Self.tbl_category" />
           <EntitySet Name="tbl_contact" EntityType="Self.tbl_contact" />
           <EntitySet Name="tbl_education" EntityType="Self.tbl_education" />
-          <EntitySet Name="tbl_job" EntityType="Self.tbl_job" />
           <EntitySet Name="tbl_message" EntityType="Self.tbl_message" />
           <EntitySet Name="tbl_project" EntityType="Self.tbl_project" />
           <EntitySet Name="tbl_services" EntityType="Self.tbl_services" />
           <EntitySet Name="tbl_slider" EntityType="Self.tbl_slider" />
           <EntitySet Name="testimonials" EntityType="DbAcunMedyaProjectModel.tbl_testimonials" />
+          <EntitySet Name="tbl_skilss11" EntityType="DbAcunMedyaProjectModel.tbl_skilss11" />
+          <EntitySet Name="tbl_Jobs" EntityType="DbAcunMedyaProjectModel.tbl_Job" />
+          <AssociationSet Name="FK_tbl_project_tbl_project" Association="DbAcunMedyaProjectModel.FK_tbl_project_tbl_project">
+            <End Role="tbl_project" EntitySet="tbl_project" />
+            <End Role="tbl_project1" EntitySet="tbl_project" />
+          </AssociationSet>
+          <EntitySet Name="sysdiagrams" EntityType="DbAcunMedyaProjectModel.sysdiagrams" />
+          <AssociationSet Name="FK_tbl_project_tbl_category" Association="DbAcunMedyaProjectModel.FK_tbl_project_tbl_category">
+            <End Role="tbl_category" EntitySet="tbl_category" />
+            <End Role="tbl_project" EntitySet="tbl_project" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="tbl_testimonials">
           <Key>
@@ -251,6 +293,60 @@
           <Property Name="ImageUrl" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Name="tittle" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="tbl_skilss11">
+          <Key>
+            <PropertyRef Name="SkillsId" />
+          </Key>
+          <Property Name="SkillsId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SkillsName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Derece" Type="Byte" />
+          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="tbl_Job">
+          <Key>
+            <PropertyRef Name="JobID" />
+          </Key>
+          <Property Name="JobID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Tittle" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="StartDate" Type="DateTime" Precision="3" />
+          <Property Name="EndDate" Type="DateTime" Precision="3" />
+          <Property Name="CompanyName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_tbl_project_tbl_project">
+          <End Type="DbAcunMedyaProjectModel.tbl_project" Role="tbl_project" Multiplicity="1" />
+          <End Type="DbAcunMedyaProjectModel.tbl_project" Role="tbl_project1" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_project">
+              <PropertyRef Name="ProjectID" />
+            </Principal>
+            <Dependent Role="tbl_project1">
+              <PropertyRef Name="ProjectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <Association Name="FK_tbl_project_tbl_category">
+          <End Type="DbAcunMedyaProjectModel.tbl_category" Role="tbl_category" Multiplicity="0..1" />
+          <End Type="DbAcunMedyaProjectModel.tbl_project" Role="tbl_project" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_category">
+              <PropertyRef Name="CategoryID" />
+            </Principal>
+            <Dependent Role="tbl_project">
+              <PropertyRef Name="CategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -307,18 +403,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="tbl_job">
-            <EntityTypeMapping TypeName="DbAcunMedyaProjectModel.tbl_job">
-              <MappingFragment StoreEntitySet="tbl_job">
-                <ScalarProperty Name="JobID" ColumnName="JobID" />
-                <ScalarProperty Name="Tittle" ColumnName="Tittle" />
-                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
-                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
-                <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="tbl_message">
             <EntityTypeMapping TypeName="DbAcunMedyaProjectModel.tbl_message">
               <MappingFragment StoreEntitySet="tbl_message">
@@ -333,6 +417,7 @@
           <EntitySetMapping Name="tbl_project">
             <EntityTypeMapping TypeName="DbAcunMedyaProjectModel.tbl_project">
               <MappingFragment StoreEntitySet="tbl_project">
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
                 <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
                 <ScalarProperty Name="ProjectName" ColumnName="ProjectName" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
@@ -373,6 +458,39 @@
                 <ScalarProperty Name="TestimonalsName" ColumnName="TestimonalsName" />
                 <ScalarProperty Name="Description1" ColumnName="Description1" />
                 <ScalarProperty Name="TestimonialsID" ColumnName="TestimonialsID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_skilss11">
+            <EntityTypeMapping TypeName="DbAcunMedyaProjectModel.tbl_skilss11">
+              <MappingFragment StoreEntitySet="tbl_skilss11">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Derece" ColumnName="Derece" />
+                <ScalarProperty Name="SkillsName" ColumnName="SkillsName" />
+                <ScalarProperty Name="SkillsId" ColumnName="SkillsId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_Jobs">
+            <EntityTypeMapping TypeName="DbAcunMedyaProjectModel.tbl_Job">
+              <MappingFragment StoreEntitySet="tbl_Jobs">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="Tittle" ColumnName="Tittle" />
+                <ScalarProperty Name="JobID" ColumnName="JobID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="DbAcunMedyaProjectModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

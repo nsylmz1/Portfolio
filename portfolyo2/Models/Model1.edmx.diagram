@@ -4,17 +4,21 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="78335516b72e4e67907f5b0d141ec817" Name="Diagram1">
+      <Diagram DiagramId="78335516b72e4e67907f5b0d141ec817" Name="Diagram1" ZoomLevel="51">
         <EntityTypeShape EntityType="DbAcunMedyaProjectModel.tbl_about" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="DbAcunMedyaProjectModel.tbl_category" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="DbAcunMedyaProjectModel.tbl_contact" Width="1.5" PointX="2.75" PointY="3.75" IsExpanded="true" />
         <EntityTypeShape EntityType="DbAcunMedyaProjectModel.tbl_education" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="DbAcunMedyaProjectModel.tbl_job" Width="1.5" PointX="4.75" PointY="3.75" IsExpanded="true" />
         <EntityTypeShape EntityType="DbAcunMedyaProjectModel.tbl_message" Width="1.5" PointX="6.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="DbAcunMedyaProjectModel.tbl_project" Width="1.5" PointX="0.75" PointY="6.75" IsExpanded="true" />
         <EntityTypeShape EntityType="DbAcunMedyaProjectModel.tbl_services" Width="1.5" PointX="2.75" PointY="6.75" IsExpanded="true" />
         <EntityTypeShape EntityType="DbAcunMedyaProjectModel.tbl_slider" Width="1.5" PointX="6.75" PointY="3.75" IsExpanded="true" />
         <EntityTypeShape EntityType="DbAcunMedyaProjectModel.tbl_testimonials" Width="1.5" PointX="5.5" PointY="6.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbAcunMedyaProjectModel.tbl_skilss11" Width="1.5" PointX="7.875" PointY="6.75" />
+        <EntityTypeShape EntityType="DbAcunMedyaProjectModel.tbl_Job" Width="1.5" PointX="10" PointY="2.625" IsExpanded="true" />
+        <AssociationConnector Association="DbAcunMedyaProjectModel.FK_tbl_project_tbl_project" />
+        <EntityTypeShape EntityType="DbAcunMedyaProjectModel.sysdiagrams" Width="1.5" PointX="8.375" PointY="9.75" />
+        <AssociationConnector Association="DbAcunMedyaProjectModel.FK_tbl_project_tbl_category" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

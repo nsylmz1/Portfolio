@@ -29,11 +29,13 @@ namespace portfolyo2.Models
         public virtual DbSet<tbl_category> tbl_category { get; set; }
         public virtual DbSet<tbl_contact> tbl_contact { get; set; }
         public virtual DbSet<tbl_education> tbl_education { get; set; }
-        public virtual DbSet<tbl_job> tbl_job { get; set; }
         public virtual DbSet<tbl_message> tbl_message { get; set; }
         public virtual DbSet<tbl_project> tbl_project { get; set; }
         public virtual DbSet<tbl_services> tbl_services { get; set; }
         public virtual DbSet<tbl_slider> tbl_slider { get; set; }
         public virtual DbSet<tbl_testimonials> testimonials { get; set; }
+        public virtual DbSet<tbl_skilss11> tbl_skilss11 { get; set; }
+        public virtual DbSet<tbl_Job> tbl_Jobs { get; set; }
+        public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
     }
 }

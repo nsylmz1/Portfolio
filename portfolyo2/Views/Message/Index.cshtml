@@ -1,0 +1,40 @@
+﻿@model List<portfolyo2.Models.tbl_message>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/AdminLayout/Index.cshtml";
+}
+
+
+<div class="container">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Message ID</th>
+                <th>Name Surname</th>
+                <th>Mail</th>
+                <th>Subject</th>
+                <th>Message Content</th>
+
+                <th>Güncelle</th>
+                <th>Sil</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.MessageID</td>
+                    <td>@item.NameSurname</td>
+                    <td>@item.Mail</td>
+                    <td>@item.Subject</td>
+                    <td>@item.MessageContact</td>
+
+                    <td><a href="/Message/UpdateMessage/@item.MessageID" class="btn btn-success">Güncelle</a></td>
+                    <td><a href="/Message/RemoveMessage/@item.MessageID" class="btn btn-danger">Sil</a></td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+    <a href="/Message/CreateMessage/" class="btn btn-secondary">Oluştur</a>
+</div>

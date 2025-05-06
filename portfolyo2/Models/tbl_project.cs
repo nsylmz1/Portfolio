@@ -21,5 +21,10 @@ namespace portfolyo2.Models
         public string image1 { get; set; }
         public string image2 { get; set; }
         public string image3 { get; set; }
+        public Nullable<int> CategoryID { get; set; }
+    
+        public virtual tbl_project tbl_project1 { get; set; }
+        public virtual tbl_project tbl_project2 { get; set; }
+        public virtual tbl_category tbl_category { get; set; }
     }
 }

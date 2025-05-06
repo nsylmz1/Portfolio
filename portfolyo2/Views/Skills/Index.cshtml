@@ -1,0 +1,37 @@
+﻿@model List<portfolyo2.Models.tbl_skilss11>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/AdminLayout/Index.cshtml";
+}
+
+<div class="container">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Skill ID</th>
+                <th>Yetenek İsmi</th>
+                <th>Derece</th>
+                <th>Description</th>
+
+                <th>Güncelle</th>
+                <th>Sil</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.SkillsId</td>
+                    <td>@item.SkillsName</td>
+                    <td>@item.Derece</td>
+                    <td>@item.Description</td>
+
+                    <td><a href="/Skills/UpdateSkills/@item.SkillsId" class="btn btn-success">Güncelle</a></td>
+                    <td><a href="/Skills/RemoveSkills/@item.SkillsId" class="btn btn-danger">Sil</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <a href="/Skills/CreateSkills/" class="btn btn-secondary">Oluştur</a>
+</div>
+

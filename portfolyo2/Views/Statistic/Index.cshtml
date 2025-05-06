@@ -1,23 +1,112 @@
-﻿
+﻿<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-dM8APNpms7V6efHyxw2MdzE1/FLGkLz0C7hRh+G3VpmJ0hC4mcT1ZkLbT6MtsOM5MEKf+QmXKLRlXZcC66VZ1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/AdminLayout/Index.cshtml";
 }
 
-<h2>burası isatistik sayfası</h2>
 
-<br />
-<label>Kaç kategori var : @ViewBag.CategoryCount</label>
-<br />
+<h2> istatistik sayfası</h2>
+<style>
+    .dashboard-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 30px;
+        margin-top: 40px;
+        padding: 0 20px;
+    }
 
-<label>Kaç Referans var  : @ViewBag.TestimonialCount</label>
-<br />
+    .dashboard-card {
+        width: 280px;
+        background: linear-gradient(135deg, #6a11cb, #2575fc);
+        color: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s ease;
+        padding: 30px 20px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
 
-<label>Son eklenen proje      :10 </label>
-<br />
+        .dashboard-card:hover {
+            transform: translateY(-8px);
+        }
 
-<label>Kaç proje var      : @ViewBag.ProjeSayisi</label>
-<br />
+        .dashboard-card .icon-circle {
+            background-color: rgba(255, 255, 255, 0.15);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px auto;
+            font-size: 28px;
+        }
 
+        .dashboard-card .title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
 
+        .dashboard-card .count {
+            font-size: 32px;
+            font-weight: bold;
+            color: #fff;
+        }
+</style>
 
+<div class="dashboard-container">
+
+    <div class="dashboard-card">
+        <div class="icon-circle"><i class="fas fa-folder-open"></i></div>
+        <div class="title">Kategoriler</div>
+        <div class="count">@ViewBag.categoryCount</div>
+    </div>
+
+    <div class="dashboard-card">
+        <div class="icon-circle"><i class="fas fa-link"></i></div>
+        <div class="title">Referanslar</div>
+        <div class="count">@ViewBag.testimonialCount</div>
+    </div>
+
+    <div class="dashboard-card">
+        <div class="icon-circle"><i class="fas fa-tasks"></i></div>
+        <div class="title">Projeler</div>
+        <div class="count">@ViewBag.projectCount</div>
+    </div>
+
+    <div class="dashboard-card">
+        <div class="icon-circle"><i class="fas fa-briefcase"></i></div>
+        <div class="title">İş</div>
+        <div class="count">@ViewBag.jobCount</div>
+    </div>
+
+    <div class="dashboard-card">
+        <div class="icon-circle"><i class="fas fa-concierge-bell"></i></div>
+        <div class="title">Hizmetler</div>
+        <div class="count">@ViewBag.serviceCount</div>
+    </div>
+
+    <div class="dashboard-card">
+        <div class="icon-circle"><i class="fas fa-lightbulb"></i></div>
+        <div class="title">Yetenekler</div>
+        <div class="count">@ViewBag.skillCount</div>
+    </div>
+
+    <div class="dashboard-card">
+        <div class="icon-circle"><i class="fas fa-envelope"></i></div>
+        <div class="title">Mesajlar</div>
+        <div class="count">@ViewBag.messageCount</div>
+    </div>
+
+    <div class="dashboard-card">
+        <div class="icon-circle"><i class="fas fa-graduation-cap"></i></div>
+        <div class="title">Eğitim</div>
+        <div class="count">@ViewBag.educationCount</div>
+    </div>
+
+</div>

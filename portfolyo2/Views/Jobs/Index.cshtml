@@ -1,4 +1,4 @@
-﻿
+﻿@model List<portfolyo2.Models.tbl_Job>
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/AdminLayout/Index.cshtml";
@@ -6,3 +6,38 @@
 
 <h2>Burası deneyim sayfası</h2>
 
+
+<div class="container">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Job ID</th>
+                <th>Tittle</th>
+                <th>Start Year</th>
+                <th>End Year</th>
+                <th>Company Name</th>
+                <th>Description</th>
+
+                <th>Güncelle</th>
+                <th>Sil</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.JobID</td>
+                    <td>@item.Tittle</td>
+                    <td>@item.StartDate</td>
+                    <td>@item.EndDate</td>
+                    <td>@item.CompanyName</td>
+                    <td>@item.Description</td>
+
+                    <td><a href="/Jobs/UpdateJob/@item.JobID" class="btn btn-success">Güncelle</a></td>
+                    <td><a href="/Jobs/RemoveJob/@item.JobID" class="btn btn-danger">Sil</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <a href="/Jobs/CreateJob/" class="btn btn-secondary">Oluştur</a>
+</div>

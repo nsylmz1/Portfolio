@@ -1,0 +1,22 @@
+﻿
+@{
+    ViewBag.Title = "CreateJob";
+    Layout = "~/Views/AdminLayout/Index.cshtml";
+}
+
+<h2>CreateJob</h2>
+
+<form method="post">
+    <label>Title</label>
+    <input type="text" class="form-control" name="Title" />
+    <label>Start Date</label>
+    <input type="text" class="form-control" name="StartDate" />
+    <label>End Date</label>
+    <input type="text" class="form-control" name="EndDate" />
+    <label>Company Name</label>
+    <input type="text" class="form-control" name="CompanyName" />
+    <label>Description</label>
+    <input type="text" class="form-control" name="Description" />
+
+    <button type="submit" style="background-color:orange">Oluştur</button>
+</form>

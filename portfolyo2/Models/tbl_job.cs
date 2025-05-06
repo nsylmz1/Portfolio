@@ -12,9 +12,9 @@ namespace portfolyo2.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class tbl_job
+    public partial class tbl_Job
     {
-        public string JobID { get; set; }
+        public int JobID { get; set; }
         public string Tittle { get; set; }
         public Nullable<System.DateTime> StartDate { get; set; }
         public Nullable<System.DateTime> EndDate { get; set; }

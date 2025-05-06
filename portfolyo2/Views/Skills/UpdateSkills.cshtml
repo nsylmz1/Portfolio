@@ -1,0 +1,20 @@
+﻿@model portfolyo2.Models.tbl_skilss11
+@{
+    ViewBag.Title = "UpdateSkills";
+    Layout = "~/Views/AdminLayout/Index.cshtml";
+}
+
+<h2>UpdateSkills</h2>
+
+<form method="post">
+    @Html.HiddenFor(x => x.SkillsId)
+    <label>SkillName</label>
+    @Html.TextBoxFor(x => x.SkillsName, new { @class = "form-control" })<br />
+    <label>Derece</label>
+    @Html.TextBoxFor(x => x.Derece, new { @class = "form-control" })<br />
+    <label>Description</label>
+    @Html.TextBoxFor(x => x.Description, new { @class = "form-control" })<br />
+
+
+    <button>Güncelle</button>
+</form>

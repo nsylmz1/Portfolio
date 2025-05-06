@@ -1,0 +1,24 @@
+﻿@model portfolyo2.Models.tbl_education
+@{
+    ViewBag.Title = "UpdateEducation";
+    Layout = "~/Views/AdminLayout/Index.cshtml";
+}
+
+<h2>UpdateEducation</h2>
+
+<form method="post">
+    @Html.HiddenFor(x => x.EducationID)
+    <label>Start Year</label>
+    @Html.TextBoxFor(x => x.StartYear, new { @class = "form-control" })<br />
+    <label>End Year</label>
+    @Html.TextBoxFor(x => x.EndeYear, new { @class = "form-control" })<br />
+    <label>Name</label>
+    @Html.TextBoxFor(x => x.Name, new { @class = "form-control" })<br />
+    <label>Description</label>
+    @Html.TextBoxFor(x => x.Description, new { @class = "form-control" })<br />
+    <label>Section</label>
+    @Html.TextBoxFor(x => x.Section, new { @class = "form-control" })<br />
+
+
+    <button>Güncelle</button>
+</form>

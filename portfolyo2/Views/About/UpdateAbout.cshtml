@@ -1,0 +1,38 @@
+﻿@model portfolyo2.Models.tbl_about
+@{
+    ViewBag.Title = "UpdateAbout";
+    Layout = "~/Views/AdminLayout/Index.cshtml";
+}
+
+<h2>UpdateAbout</h2>
+
+<form method="post">
+    @Html.HiddenFor(x => x.AboutID)
+    <br />
+    <label>ImageURL</label>
+    @Html.TextBoxFor(x => x.ImageURL, new { @class = "form-control" })<br />
+    <label>Title</label>
+    @Html.TextBoxFor(a => a.Tittle, new { @class = "form-control" })<br />
+    <label>BirthDay</label>
+    @Html.TextBoxFor(x => x.BirthDay, new { @class = "form-control" })<br />
+    <label>WebSite</label>
+    @Html.TextBoxFor(x => x.WebSite, new { @class = "form-control" })<br />
+    <label>Phone</label>
+    @Html.TextBoxFor(x => x.Phone, new { @class = "form-control" })<br />
+    <label>City</label>
+    @Html.TextBoxFor(x => x.City, new { @class = "form-control" })<br />
+    <label>Age</label>
+    @Html.TextBoxFor(x => x.Age, new { @class = "form-control" })<br />
+    <label>Email</label>
+    @Html.TextBoxFor(x => x.Email, new { @class = "form-control" })<br />
+    <label>Freelance</label>
+    @Html.TextBoxFor(x => x.Freelance, new { @class = "form-control" })<br />
+    <label>Description1</label>
+    @Html.TextBoxFor(x => x.Description1, new { @class = "form-control" })<br />
+    <label>Description2</label>
+    @Html.TextBoxFor(x => x.Description2, new { @class = "form-control" })<br />
+    <label>Degree</label>
+    @Html.TextBoxFor(x => x.Degree, new { @class = "form-control" })<br />
+
+    <button>Güncelle</button>
+</form>

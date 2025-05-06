@@ -14,7 +14,16 @@ namespace portfolyo2.Models
     
     public partial class tbl_category
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public tbl_category()
+        {
+            this.tbl_project = new HashSet<tbl_project>();
+        }
+    
         public int CategoryID { get; set; }
         public string CategoryName { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tbl_project> tbl_project { get; set; }
     }
 }
