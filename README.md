@@ -17,6 +17,9 @@ Bu proje, Acunmedya Akademi tarafından staj eğitimi kapsamında ödev olarak h
 🅱️ Bootstrap – Responsive ve modern tasarım
 
 ✨ Özellikler
+
+
+
 ✔ CRUD İşlemleri – Kayıt ekleme, güncelleme, silme ve listeleme
 
 ✔ LINQ Sorguları – Daha esnek ve optimize edilmiş veritabanı işlemleri
