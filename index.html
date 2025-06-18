@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Görev Takip Sistemi</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Bootstrap Datepicker -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+    <style>
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+        }
+        .status-pending {
+            background-color: #ffc107;
+            color: #212529;
+        }
+        .status-in-progress {
+            background-color: #17a2b8;
+            color: white;
+        }
+        .status-completed {
+            background-color: #28a745;
+            color: white;
+        }
+        .task-card {
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: 0.3s;
+        }
+        .task-card:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .action-buttons {
+            white-space: nowrap;
+        }
+        /* Takvim Stilleri */
+        .calendar-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .calendar-header {
+            background: #007bff;
+            color: white;
+        }
+
+        .calendar-day-header {
+            flex: 1;
+            text-align: center;
+            padding: 15px 10px;
+            font-weight: bold;
+            border-right: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .calendar-day-header:last-child {
+            border-right: none;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            background: #e9ecef;
+        }
+
+        .calendar-day {
+            background: white;
+            min-height: 120px;
+            padding: 8px;
+            position: relative;
+            border: 1px solid #e9ecef;
+        }
+
+        .calendar-day.other-month {
+            opacity: 0.3;
+            background: #f8f9fa;
+        }
+
+        .calendar-day.today {
+            background: #fff3cd;
+            border-color: #ffeaa7;
+        }
+
+        .day-number {
+            font-weight: bold;
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .task-bar {
+            height: 4px;
+            border-radius: 2px;
+            margin: 2px 0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .task-bar:hover {
+            height: 6px;
+            opacity: 0.8;
+        }
+
+        .task-text {
+            font-size: 10px;
+            color: #666;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            cursor: pointer;
+            padding: 1px 4px;
+            border-radius: 3px;
+            margin: 1px 0;
+        }
+
+        .task-text:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        /* Bildirim Stilleri */
+        .notification-item {
+            padding: 10px 15px;
+            border-bottom: 1px solid #eee;
+            transition: background-color 0.2s;
+        }
+
+        .notification-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .notification-item.unread {
+            background-color: #e3f2fd;
+            border-left: 3px solid #2196f3;
+        }
+
+        .notification-content {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .notification-time {
+            font-size: 11px;
+            color: #999;
+            margin-top: 3px;
+        }
+
+        .notification-task {
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Cihaz Takvimine Ekleme Butonu */
+        .add-to-calendar-btn {
+            background: #4285f4;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        .add-to-calendar-btn:hover {
+            background: #3367d6;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">Görev Takip</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item" id="calendarNav">
+                        <a class="nav-link" href="#" id="calendarBtn">
+                            <i class="fas fa-calendar-alt"></i> Takvim
+                        </a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown" id="notificationsNav">
+                        <a class="nav-link dropdown-toggle" href="#" id="notificationsDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-bell"></i>
+                            <span id="notificationBadge" class="badge bg-danger" style="display: none;">0</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" id="notificationsList" style="min-width: 350px; max-height: 400px; overflow-y: auto;">
+                            <li><h6 class="dropdown-header">Bildirimler</h6></li>
+                            <li><div id="notificationsContent">Bildirim yükleniyor...</div></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item d-none" id="userInfoNav">
+                        <a class="nav-link text-white" id="userEmail"></a>
+                    </li>
+                    <li class="nav-item d-none" id="reportNav">
+                        <a class="nav-link" href="#" id="downloadReportBtn">
+                            <i class="fas fa-download"></i> Rapor İndir
+                        </a>
+                    </li>
+                    <li class="nav-item d-none" id="userManagementNav">
+                        <a class="nav-link" href="#" id="userManagementBtn">
+                            <i class="fas fa-users"></i> Kullanıcı Yönetimi
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="logoutBtn">Çıkış Yap</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <!-- Giriş Formu -->
+        <div id="loginFormContainer" class="card p-4">
+            <h2 class="text-center mb-4">Giriş Yap</h2>
+            <form id="loginForm">
+                <div class="mb-3">
+                    <label for="email" class="form-label">E-posta</label>
+                    <input type="email" class="form-control" id="email" required>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Şifre</label>
+                    <input type="password" class="form-control" id="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100" id="loginBtn">Giriş Yap</button>
+            </form>
+        </div>
+
+        <!-- Admin Panel -->
+        <div id="adminPanel" class="mt-4 d-none">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Admin Paneli</h2>
+                <div>
+                    <button id="deleteTaskBtn" class="btn btn-danger d-none">Görevi Sil</button>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addTaskModal">
+                        <i class="fas fa-plus"></i> Yeni Görev
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Filtre Bölümü -->
+            <div class="card mb-4">
+                <div class="card-header bg-light">
+                    <h5>Filtrele</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="filterDate" class="form-label">Tarih</label>
+                                <input type="text" class="form-control" id="filterDate">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="filterType" class="form-label">Filtre Türü</label>
+                                <select class="form-control" id="filterType">
+                                    <option value="due_date">Bitiş Tarihi</option>
+                                    <option value="assigned_date">Atanma Tarihi</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4 d-flex align-items-end">
+                            <div class="mb-3 d-flex">
+                                <button class="btn btn-primary me-2" id="applyFilterBtn">Uygula</button>
+                                <button class="btn btn-secondary" id="resetFilterBtn">Sıfırla</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header bg-light">
+                            <h5>Görevler</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Başlık</th>
+                                            <th>Açıklama</th>
+                                            <th>Durum</th>
+                                            <th>Atanan</th>
+                                            <th>Atanma Tarihi</th>
+                                            <th>Bitiş Tarihi</th>
+                                            <th>İşlemler</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="adminTaskList">
+                                        <!-- Görevler buraya gelecek -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admin Panel - Adımlar Tablosu -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header bg-light d-flex justify-content-between">
+                            <h5>Tüm Görev Adımları</h5>
+                            <button class="btn btn-sm btn-primary" id="loadAllStepsBtn">
+                                <i class="fas fa-refresh"></i> Yenile
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Görev</th>
+                                            <th>Adım</th>
+                                            <th>Açıklama</th>
+                                            <th>Durum</th>
+                                            <th>Oluşturan</th>
+                                            <th>Oluşturma Tarihi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="adminStepsList">
+                                        <!-- Adımlar buraya gelecek -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kullanıcı Yönetimi Paneli -->
+        <div id="userManagementPanel" class="mt-4 d-none">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Kullanıcı Yönetimi</h2>
+                <button class="btn btn-secondary" id="backToAdminBtn">
+                    <i class="fas fa-arrow-left"></i> Admin Paneline Dön
+                </button>
+            </div>
+            
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header bg-light">
+                            <h5>Kullanıcılar</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>E-posta</th>
+                                            <th>Rol</th>
+                                            <th>İşlemler</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="usersList">
+                                        <!-- Kullanıcılar buraya gelecek -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kullanıcı Panel -->
+        <div id="userPanel" class="mt-4 d-none">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Görevlerim</h2>
+            </div>
+            
+            <!-- Kullanıcı Filtre Bölümü -->
+            <div class="card mb-4">
+                <div class="card-header bg-light">
+                    <h5>Filtrele</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="userFilterDate" class="form-label">Tarih</label>
+                                <input type="text" class="form-control" id="userFilterDate">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="userFilterType" class="form-label">Filtre Türü</label>
+                                <select class="form-control" id="userFilterType">
+                                    <option value="due_date">Bitiş Tarihi</option>
+                                    <option value="assigned_date">Atanma Tarihi</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4 d-flex align-items-end">
+                            <div class="mb-3 d-flex">
+                                <button class="btn btn-primary me-2" id="userApplyFilterBtn">Uygula</button>
+                                <button class="btn btn-secondary" id="userResetFilterBtn">Sıfırla</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row" id="userTaskList">
+                <!-- Kullanıcı görevleri buraya gelecek -->
+            </div>
+        </div>
+        
+        <!-- Rapor Modal -->
+        <div class="modal fade" id="reportModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Rapor İndir</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="reportDate" class="form-label">Rapor Tarihi</label>
+                            <input type="text" class="form-control" id="reportDate">
+                        </div>
+                        <div class="mb-3">
+                            <label for="reportFilterType" class="form-label">Rapor Türü</label>
+                            <select class="form-control" id="reportFilterType">
+                                <option value="due_date">Bitiş Tarihi</option>
+                                <option value="assigned_date">Atanma Tarihi</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary" id="downloadReportBtn">
+                            <i class="fas fa-download"></i> İndir
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Yeni Görev Ekleme Modal -->
+    <div class="modal fade" id="addTaskModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Yeni Görev Ekle</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addTaskForm">
+                        <div class="mb-3">
+                            <label for="taskTitle" class="form-label">Görev Başlığı</label>
+                            <input type="text" class="form-control" id="taskTitle" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="taskDescription" class="form-label">Açıklama</label>
+                            <textarea class="form-control" id="taskDescription" rows="3"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="taskDate" class="form-label">Bitiş Tarihi</label>
+                            <input type="text" class="form-control" id="taskDate" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="taskAssignedTo" class="form-label">Atanacak Kullanıcı</label>
+                            <select class="form-control" id="taskAssignedTo" required>
+                                <!-- Kullanıcılar buraya gelecek -->
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Ekle</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Görev Güncelleme Modal -->
+    <div class="modal fade" id="updateTaskModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Görevi Güncelle</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="updateTaskForm">
+                        <input type="hidden" id="updateTaskId">
+                        <div class="mb-3">
+                            <label for="updateTaskTitle" class="form-label">Görev Başlığı</label>
+                            <input type="text" class="form-control" id="updateTaskTitle" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="updateTaskDescription" class="form-label">Açıklama</label>
+                            <textarea class="form-control" id="updateTaskDescription" rows="3"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="updateTaskDate" class="form-label">Bitiş Tarihi</label>
+                            <input type="text" class="form-control" id="updateTaskDate" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="updateTaskAssignedTo" class="form-label">Atanacak Kullanıcı</label>
+                            <select class="form-control" id="updateTaskAssignedTo" required>
+                                <!-- Kullanıcılar buraya gelecek -->
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="updateTaskStatus" class="form-label">Durum</label>
+                            <select class="form-control" id="updateTaskStatus" required>
+                                <option value="pending">Beklemede</option>
+                                <option value="in-progress">Devam Ediyor</option>
+                                <option value="completed">Tamamlandı</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Güncelle</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Kullanıcı Rolü Güncelleme Modal -->
+    <div class="modal fade" id="updateRoleModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Kullanıcı Rolü Güncelle</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="updateRoleForm">
+                        <div class="mb-3">
+                            <label class="form-label">Rol</label>
+                            <select class="form-select" id="updateRoleUserRole" required>
+                                <option value="">Rol Seçin</option>
+                                <option value="user">Kullanıcı</option>
+                                <option value="admin">Admin</option>
+                                <option value="superAdmin">Süper Admin</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                    <button type="button" class="btn btn-primary" id="updateRoleBtn">Güncelle</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Takvim Paneli -->
+    <div id="calendarPanel" class="container mt-4 d-none">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>Görev Takvimi</h2>
+                    <div>
+                        <button class="btn btn-outline-secondary me-2" id="prevMonth">
+                            <i class="fas fa-chevron-left"></i> Önceki Ay
+                        </button>
+                        <span id="currentMonthYear" class="fw-bold"></span>
+                        <button class="btn btn-outline-secondary ms-2" id="nextMonth">
+                            Sonraki Ay <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                    <button class="btn btn-secondary" id="backFromCalendar">
+                        <i class="fas fa-arrow-left"></i> Geri
+                    </button>
+                </div>
+                
+                <div class="calendar-container">
+                    <div class="calendar-header d-flex">
+                        <div class="calendar-day-header">Pazartesi</div>
+                        <div class="calendar-day-header">Salı</div>
+                        <div class="calendar-day-header">Çarşamba</div>
+                        <div class="calendar-day-header">Perşembe</div>
+                        <div class="calendar-day-header">Cuma</div>
+                        <div class="calendar-day-header">Cumartesi</div>
+                        <div class="calendar-day-header">Pazar</div>
+                    </div>
+                    <div id="calendarGrid" class="calendar-grid">
+                        <!-- Takvim günleri buraya JavaScript ile eklenecek -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Görev Detay Modal -->
+    <div class="modal fade" id="taskDetailModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Görev Detayları</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="taskDetailContent">
+                    <!-- Görev detayları buraya JavaScript ile eklenecek -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Adım Ekleme Modal -->
+    <div class="modal fade" id="addStepModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Adım Ekle</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addStepForm">
+                        <input type="hidden" id="stepTaskId">
+                        <div class="mb-3">
+                            <label for="stepTitle" class="form-label">Adım Başlığı</label>
+                            <input type="text" class="form-control" id="stepTitle" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="stepDescription" class="form-label">Açıklama</label>
+                            <textarea class="form-control" id="stepDescription" rows="3"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Adım Ekle</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Adım Listesi Modal -->
+    <div class="modal fade" id="stepsModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Görev Adımları</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="stepsContent">
+                        <!-- Adımlar buraya gelecek -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <!-- Firebase CDN -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAnalytics } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js';
+        
+        // Firebase yapılandırması
+        const firebaseConfig = {
+            apiKey: "AIzaSyBjqFx0IoJ1RcYsZIvgp7j4d-lFD09YoWM",
+            authDomain: "gorev-takip-cc22e.firebaseapp.com",
+            projectId: "gorev-takip-cc22e",
+            storageBucket: "gorev-takip-cc22e.firebasestorage.app",
+            messagingSenderId: "726400043015",
+            appId: "1:726400043015:web:80491c718fbc9b61efc2a2",
+            measurementId: "G-0Z0P4H43TC"
+        };
+
+        // Firebase'i başlat
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        
+        // Global olarak erişilebilir yap
+        window.firebaseApp = app;
+        window.firebaseAnalytics = analytics;
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap Datepicker -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.tr.min.js"></script>
+    <!-- App JS -->
+    <script type="module" src="app.js?v=3"></script>
+</body>
+</html> 
