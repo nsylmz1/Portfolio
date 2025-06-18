@@ -1,0 +1,24 @@
+﻿@model portfolyo2.Models.tbl_Job
+@{
+    ViewBag.Title = "UpdateJob";
+    Layout = "~/Views/AdminLayout/Index.cshtml";
+}
+
+<h2>UpdateJob</h2>
+
+<form method="post">
+    @Html.HiddenFor(x => x.JobID)
+    <label>Title</label>
+    @Html.TextBoxFor(x => x.Tittle, new { @class = "form-control" })<br />
+    <label>Start Date</label>
+    @Html.TextBoxFor(x => x.StartDate, new { @class = "form-control" })<br />
+    <label>End Date</label>
+    @Html.TextBoxFor(x => x.EndDate, new { @class = "form-control" })<br />
+    <label>Company Name</label>
+    @Html.TextBoxFor(x => x.CompanyName, new { @class = "form-control" })<br />
+    <label>Description</label>
+    @Html.TextBoxFor(x => x.Description, new { @class = "form-control" })<br />
+
+
+    <button>Güncelle</button>
+</form>

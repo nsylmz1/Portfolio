@@ -1,0 +1,115 @@
+﻿
+
+@model List<portfolyo2.Models.tbl_category>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/AdminLayout/Index.cshtml";
+}
+
+<h2> kategori sayfası</h2>
+
+<div class="container">
+    <table class="table table-bordered"
+               <thead>
+                   <tr>
+                       <th>CategoryID</th>
+                       <th>Kategori ismi</th>
+                       <th>Güncelle
+                       </th>
+                       <th>Sil</th>
+                   </tr>
+               </thead>
+               <tbody>
+
+                   @foreach(var item in Model)
+            {
+<tr>
+    <td>@item.CategoryID</td>
+    <td>@item.CategoryName</td>
+    <td><a href="/Categories/UpdateCategory/@item.CategoryID" class="btn btn-danger">Güncelle</a></td>
+    <td><a href="/Categories/DeleteCategory/@item.CategoryID" class="btn btn-dark">Sil</a></td>
+
+</tr>
+            }
+               </tbody>
+    </table>
+    ><a href="/Categories/CreateCategory" class="btn btn-danger">Oluştur</a>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*<tr>
+    <td>2</td>
+    <td>Web Geliştirme</td>
+    <td><a href="#" class="btn btn-danger">Güncelle</a></td>
+    <td><a href="#" class="btn btn-dark">Sil</a></td>
+
+</tr>
+<tr>
+    <td>3</td>
+    <td>Masaüstü Geliştirme</td>
+    <td><a href="#" class="btn btn-danger">Güncelle</a></td>
+    <td><a href="#" class="btn btn-dark">Sil</a></td>
+
+</tr>
+<tr>
+    <td>4</td>
+    <td>Gömülü Yazılım</td>
+    <td><a href="#" class="btn btn-danger">Güncelle</a></td>
+    <td><a href="#" class="btn btn-dark">Sil</a></td>
+
+</tr>
+<tr>
+    <td>5</td>
+    <td>Oyun Programlama</td>
+    <td><a href="#" class="btn btn-danger">Güncelle</a></td>
+    <td><a href="#" class="btn btn-dark">Sil</a></td>
+
+</tr>*@

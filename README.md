@@ -197,85 +197,58 @@ EMAIL_PASSWORD=your-app-password
 2. Gmail hesabınızda:
    - 2 Adımlı Doğrulama'yı etkinleştirin
    - Uygulama şifresi oluşturun
-   - Bu şifreyi `.env` dosyasındaki `EMAIL_PASSWORD` değişkenine yazın
 
-### 5. Postman Koleksiyonunu İçe Aktarma
+### 5. Uygulamayı Çalıştırma
 
-1. Postman'i açın
-2. Sol üst köşedeki "Import" butonuna tıklayın
-3. "File" sekmesinde "Upload Files" butonuna tıklayın
-4. Projenin `docs` klasöründeki `postman_collection.json` dosyasını seçin
-5. "Import" butonuna tıklayın
-
-### 6. Uygulamayı Çalıştırma
-
-1. İlk terminal penceresinde backend'i başlatın:
 ```bash
-# Sanal ortamın aktif olduğundan emin olun
-python3 app.py
+# Backend'i başlatın
+python app.py
+
+# Yeni bir terminal açın ve frontend'i başlatın
+python -m http.server 8000
 ```
 
-2. İkinci terminal penceresinde frontend'i başlatın:
-```bash
-# Proje dizininde olduğunuzdan emin olun
-python3 -m http.server 8000
-```
+Tarayıcınızda `http://localhost:8000` adresine gidin.
 
-3. Tarayıcınızda http://localhost:8000 adresine gidin
+## API Dokümantasyonu
 
-## API Kullanımı
+Postman koleksiyonu `docs/postman_collection.json` dosyasında bulunmaktadır.
 
-### Görev Oluşturma
-```bash
-POST http://localhost:5001/gorev
-Content-Type: application/json
+## Katkıda Bulunma
 
-{
-  "title": "Test Görevi",
-  "description": "Bu bir test görevidir.",
-  "assigned_to": "test@ornek.com",
-  "due_date": "2025-05-15",
-  "status": "pending"
-}
-```
-
-### Kullanıcının Görevlerini Getirme
-```bash
-GET http://localhost:5001/gorevler/test@ornek.com
-```
-
-### Görev Durumunu Güncelleme
-```bash
-PATCH http://localhost:5001/gorev/{gorev_id}
-Content-Type: application/json
-
-{
-  "status": "tamamlandı"
-}
-```
-
-### Rapor Alma
-```bash
-GET http://localhost:5001/rapor
-```
-
-## Hata Giderme
-
-### Firebase Bağlantı Hataları
-1. Firebase servis anahtarının doğru konumda olduğunu kontrol edin
-2. Firebase projesinin aktif olduğunu kontrol edin
-3. İnternet bağlantınızı kontrol edin
-
-### E-posta Gönderme Hataları
-1. Gmail hesabınızda "Daha az güvenli uygulama erişimi"nin açık olduğunu kontrol edin
-2. Uygulama şifresinin doğru olduğunu kontrol edin
-3. .env dosyasındaki e-posta bilgilerinin doğru olduğunu kontrol edin
-
-### Postman Hataları
-1. Backend'in çalışır durumda olduğunu kontrol edin
-2. URL'lerin doğru olduğunu kontrol edin
-3. İstek gövdesinin (body) doğru formatta olduğunu kontrol edin
+1. Bu repository'yi fork edin
+2. Yeni bir branch oluşturun (`git checkout -b feature/yeni-ozellik`)
+3. Değişikliklerinizi commit edin (`git commit -am 'Yeni özellik eklendi'`)
+4. Branch'inizi push edin (`git push origin feature/yeni-ozellik`)
+5. Pull Request oluşturun
 
 ## Lisans
 
-Bu proje MIT lisansı altında lisanslanmıştır. 
+Bu proje MIT lisansı altında lisanslanmıştır.
+
+---
+
+# Portfolio Projesi
+
+Bu proje, Acunmedya Akademi tarafından staj eğitimi kapsamında ödev olarak hazırlanmıştır.
+
+## 🛠 Kullanılan Teknolojiler ve Yapılar
+
+### 💻 Backend:
+- 🏗 ASP.NET MVC – Model-View-Controller mimarisi
+- 🛢 Entity Framework (DB First) – Veritabanı odaklı modelleme
+- 🗄 SQL Server – Veritabanı yönetimi
+- 🔍 LINQ – Dinamik sorgulama
+
+### 🎨 Frontend:
+- 🅱️ Bootstrap – Responsive ve modern tasarım
+
+## ✨ Özellikler
+
+- ✔ CRUD İşlemleri – Kayıt ekleme, güncelleme, silme ve listeleme
+- ✔ LINQ Sorguları – Daha esnek ve optimize edilmiş veritabanı işlemleri
+- ✔ DB First Yaklaşımı – Önceden oluşturulmuş SQL Server veritabanı üzerinden modelleme
+
+## 📷 Ekran Görüntüleri
+
+Proje içerisinde WhatsApp Image dosyaları bulunmaktadır.

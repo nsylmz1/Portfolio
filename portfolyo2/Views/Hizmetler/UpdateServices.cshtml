@@ -1,0 +1,23 @@
+﻿@model portfolyo2.Models.tbl_services
+@{
+    ViewBag.Title = "UpdateServices";
+    Layout = "~/Views/AdminLayout/Index.cshtml";
+}
+
+<h2>UpdateServices</h2>
+
+
+
+<form method="post">
+    @Html.HiddenFor(x => x.ServiceID)
+    <label>Description</label>
+    @Html.TextBoxFor(x => x.Description, new { @class = "form-control" })<br />
+    <label>Title</label>
+    @Html.TextBoxFor(x => x.tittle, new { @class = "form-control" })<br />
+    <label>IconUrl</label>
+    @Html.TextBoxFor(x => x.Icon, new { @class = "form-control" })<br />
+    <label>Description2</label>
+    @Html.TextBoxFor(x => x.description2, new { @class = "form-control" })<br />
+
+    <button>Güncelle</button>
+</form>

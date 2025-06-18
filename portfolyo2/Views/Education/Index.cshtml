@@ -1,0 +1,41 @@
+﻿@model List<portfolyo2.Models.tbl_education>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/AdminLayout/Index.cshtml";
+}
+
+
+<div class="container">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Education ID</th>
+                <th>Start Year</th>
+                <th>End Year</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Section</th>
+
+                <th>Güncelle</th>
+                <th>Sil</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.EducationID</td>
+                    <td>@item.StartYear</td>
+                    <td>@item.EndeYear</td>
+                    <td>@item.Name</td>
+                    <td>@item.Description</td>
+                    <td>@item.Section</td>
+
+                    <td><a href="/Education/UpdateEducation/@item.EducationID" class="btn btn-success">Güncelle</a></td>
+                    <td><a href="/Education/RemoveEducation/@item.EducationID" class="btn btn-danger">Sil</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <a href="/Education/CreateEducation/" class="btn btn-secondary">Oluştur</a>
+</div>

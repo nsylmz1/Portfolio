@@ -1,0 +1,37 @@
+﻿@model List<portfolyo2.Models.tbl_slider>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/AdminLayout/Index.cshtml";
+}
+
+<div class="container">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Slider ID</th>
+                <th>Name Surname</th>
+                <th>Description</th>
+                <th>Image URL</th>
+
+                <th>Güncelle</th>
+                <th>Sil</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.SlıderID</td>
+                    <td>@item.NameSurname</td>
+                    <td>@item.Description</td>
+                    <td><img src="@item.ImageURL" style="width:50px" /></td>
+
+                    <td><a href="/Slider/UpdateSlider/@item.SlıderID" class="btn btn-success">Güncelle</a></td>
+                    <td><a href="/Slider/RemoveSlider/@item.SlıderID" class="btn btn-danger">Sil</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <a href="/Slider/CreateSlider/" class="btn btn-secondary">Oluştur</a>
+</div>
+
